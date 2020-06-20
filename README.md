@@ -1,3 +1,6 @@
+# Intro
+
+Relates to the Blockstack Clarity Hackathon https://gitcoin.co/issue/blockstack/hackathons/4/4407
 
 # Setup
 
