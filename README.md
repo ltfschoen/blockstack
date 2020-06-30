@@ -2,7 +2,7 @@
 
 Relates to the Blockstack Clarity Hackathon https://gitcoin.co/issue/blockstack/hackathons/4/4407
 
-# Setup
+# Setup Local Dev Environment & IDE
 
 Add VS Code plugins for Clarity language:
 * blockstack.clarity
@@ -15,10 +15,22 @@ nvm use v13.12.0
 npm init clarity-starter
 ```
 
+# Create Testnet Address & Obtain STX
+
+## CLI
+
+### CLI Setup
+
 Setup Blockstack CLI for Stacks 2.0
 ```
 sudo npm install -g "https://github.com/blockstack/cli-blockstack#feature/stacks-2.0-tx"
 ```
+
+### Obtain Testnet STX via CLI
+
+Follow these steps: https://docs.blockstack.org/core/smart/tutorial.html#get-familiar-with-cli-optional
+
+**DOES NOT WORK**
 
 Create a new STX address and save keychain details. View the Testnet STX address. The `-t` flag targets the Testnet.
 ```
@@ -33,8 +45,22 @@ stx="$(awk -v FS="address\":\"" 'NF>1{print $2}' new_keychain.txt | sed 's/\".*/
 curl -XPOST "https://sidecar.staging.blockstack.xyz/sidecar/v1/debug/faucet?address=$stx" | json_pp
 ```
 
+## UI
+
+### Obtain Testnet STX via UI
+
+Go to the Blockstack Explorer Sandbox (similar to Ethereum Remix): https://testnet-explorer.blockstack.org/sandbox?tab=faucet
+
+Request Testnet STX
+
+# Deploy Contract to Stacks 2.0 Blockchain
+
+Follow these steps: https://docs.blockstack.org/core/smart/tutorial.html#deploy-the-contract
+
 # References
 
 * https://docs.blockstack.org/core/smart/tutorial.html
 * https://unix.stackexchange.com/questions/1096/grep-removing-text-after-delimiter-token
 * https://stackoverflow.com/questions/30776265/how-to-grep-for-value-in-a-key-value-store-from-plain-text
+* Chain Status - http://status.test-blockstack.com/
+* Blockstack Explorer Sandbox & Testnet Faucet - https://docs.blockstack.org/core/smart/tutorial.html#access-the-explorer-sandbox
