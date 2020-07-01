@@ -2,6 +2,31 @@
 
 Relates to the Blockstack Clarity Hackathon https://gitcoin.co/issue/blockstack/hackathons/4/4407
 
+# Achievements
+
+## About
+
+Created a script so you can use the Blockstack CLI and access information from your keychain file without having to log its contents into the terminal or having to open it in a text editor that could exposing your sensitive mnemonic or private keys to hackers that may have access to the logs
+
+## Usage
+
+1) Generate a Blockstack address and keychain file (e.g. new_keychain.txt) using the Blockstack CLI for Stacks 2.0 (as described [here](https://docs.blockstack.org/core/smart/tutorial.html#get-familiar-with-cli-optional)).
+
+2) Generate local environment variables that store sensitive values contained in the keychain file.
+```
+stxAddress="$(awk -v FS="address\":\"" 'NF>1{print $2}' new_keychain.txt | sed 's/\".*//')"
+stxPrivateKey="$(awk -v FS="privateKey\":\"" 'NF>1{print $2}' new_keychain.txt | sed 's/\".*//')"
+stxMnemonic="$(awk -v FS="mnemonic\":\"" 'NF>1{print $2}' new_keychain.txt | sed 's/\".*//')"
+stxBtcAddress="$(awk -v FS="btcAddress\":\"" 'NF>1{print $2}' new_keychain.txt | sed 's/\".*//')"
+```
+
+3) Use the following environment variables that are generated in your Blockstack CLI for Stacks 2.0 commands `$stxAddress`, `$stxPrivateKey`, `$stxMnemonic`, and `$stxBtcAddress`, whose values correspond with the values of the `address`, `privateKey`, `mnemonic`, and `btcAddress` keys contained in your keychain file (e.g. new_keychain.txt).
+
+Example:
+```
+blockstack call_contract_func $stxAddress hello-world echo-number 2000 1 $stxPrivateKey -t
+```
+
 # Setup Local Dev Environment & IDE
 
 Add VS Code plugins for Clarity language:
@@ -115,3 +140,7 @@ Follow these steps: https://docs.blockstack.org/core/smart/tutorial-counter.html
 * Chain Status - http://status.test-blockstack.com/
 * Blockstack Explorer Sandbox & Testnet Faucet - https://docs.blockstack.org/core/smart/tutorial.html#access-the-explorer-sandbox
 * Clarity language reference - https://docs.blockstack.org/core/smart/clarityref
+
+# Other Links
+
+* https://unix.stackexchange.com/a/505342/269147
