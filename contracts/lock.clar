@@ -41,7 +41,7 @@
       (var-set is-locked 1)
 
       ;; return new value of locked status
-      (ok true))))
+      (ok true)))))
 
 ;; change status to unlocked
 ;; public function
@@ -52,25 +52,26 @@
   (if (is-eq tx-sender owner)
     ;; evaluate multi-line expression
     (begin
-      ;; set new value so status is locked
+      ;; set new value so status is unlocked
       (var-set is-locked 0)
 
       ;; return new value of locked status
-      (ok true))))
+      (ok true)))))
 
 ;; withdrawal by recipient only when unlocked by contract-owner
 ;; public function
 (define-public (withdraw ())
   ;; declare local variable and assign contract storage value
   (let ((owner (var-get contract-owner)))
-  (let ((recipient (var-get recipient)))
-  ;; check if sender of transaction is the recipient
-  (if (is-eq tx-sender recipient)
-    ;; check if the status is unlocked
-    (if (is-eq is-locked 0)
-      ;; evaluate multi-line expression
-      (begin
-        ;; transfer token balance of contract-owner to recipient
-        (ft-transfer? lock-token u100 owner recipient)
-        ;; return new value of locked status
-        (ok true))))
+    (let ((recipient (var-get recipient)))
+      ;; check if sender of transaction is the recipient
+      (if (is-eq tx-sender recipient)
+        ;; check if the status is unlocked
+        (if (is-eq is-locked 0)
+          ;; evaluate multi-line expression
+          (begin
+            ;; transfer token balance of contract-owner to recipient
+            (ft-transfer? lock-token u100 contract-owner recipient)
+            ;; return new value of locked status
+            (ok true)))))))
+
