@@ -120,6 +120,7 @@ Click "Search"
 ```
 stxPrivateKey="$(awk -v FS="privateKey\":\"" 'NF>1{print $2}' new_keychain.txt | sed 's/\".*//')"
 blockstack deploy_contract ./contracts/hello-world.clar hello-world 2000 0 $stxPrivateKey -t
+blockstack deploy_contract ./contracts/lock.clar lock 3000 0 $stxPrivateKey -t
 ```
 
 # Call Contract Method
