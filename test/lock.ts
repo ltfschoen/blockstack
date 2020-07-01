@@ -7,7 +7,7 @@ describe("lock contract test suite", () => {
 
   before(async () => {
     provider = await ProviderRegistry.createProvider();
-    lockClient = new Client("SP3GWX3NE58KXHESRYE4DYQ1S31PQJTCRXB3PE9SB.lock", "lock", provider);
+    lockClient = new Client("STQX02C1KXY4VFYX2ABECJYZ4XAG5KV99WAQ370Z.lock", "lock", provider);
   });
 
   it("should have a valid syntax", async () => {
