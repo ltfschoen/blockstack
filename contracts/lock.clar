@@ -39,7 +39,6 @@
     (begin
       ;; set new value so status is locked
       (var-set is-locked 1)
-
       ;; return new value of locked status
       (ok true)
     )
@@ -58,7 +57,6 @@
     (begin
       ;; set new value so status is unlocked
       (var-set is-locked 0)
-
       ;; return new value of locked status
       (ok true)
     )
@@ -82,5 +80,3 @@
       )
       (ok false)
     )))
-
-
