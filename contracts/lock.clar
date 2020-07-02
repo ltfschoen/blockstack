@@ -71,9 +71,8 @@
   ;; declare local variable and assign contract storage value
   (let ((owner (var-get contract-owner)) (recipient (var-get beneficiary)))
     ;; check if sender of transaction is the recipient
-    (if (is-eq tx-sender recipient)
-      ;; check if the status is unlocked
-      ;; (if (is-eq is-locked 0)
+    ;; check if the status is unlocke
+    (if (and (is-eq tx-sender recipient) (is-eq (var-get is-locked) 0))
       ;; evaluate multi-line expression
       (begin
         ;; transfer token balance of contract-owner to recipient
