@@ -30,7 +30,7 @@
 
 ;; change status to locked
 ;; public function
-(define-public (lock (address (optional principal)))
+(define-public (lock)
   ;; declare local variable and assign contract storage value
   (let ((owner (var-get contract-owner)))
   ;; check if sender of transaction is the contract owner
@@ -48,7 +48,7 @@
 
 ;; change status to unlocked
 ;; public function
-(define-public (unlock (address (optional principal)))
+(define-public (unlock)
   ;; declare local variable and assign contract storage value
   (let ((owner (var-get contract-owner)))
   ;; check if sender of transaction is the contract owner
@@ -67,7 +67,7 @@
 
 ;; withdrawal by recipient only when unlocked by contract-owner
 ;; public function
-(define-public (withdraw (address (optional principal)))
+(define-public (withdraw)
   ;; declare local variable and assign contract storage value
   (let ((owner (var-get contract-owner)) (recipient (var-get beneficiary)))
     ;; check if sender of transaction is the recipient
