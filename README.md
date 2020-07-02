@@ -120,6 +120,7 @@ Click "Search"
 ```
 stxPrivateKey="$(awk -v FS="privateKey\":\"" 'NF>1{print $2}' new_keychain.txt | sed 's/\".*//')"
 blockstack deploy_contract ./contracts/hello-world.clar hello-world 2000 0 $stxPrivateKey -t
+blockstack deploy_contract ./contracts/lock.clar lock 3000 0 $stxPrivateKey -t
 ```
 
 # Call Contract Method
@@ -130,9 +131,39 @@ stxPrivateKey="$(awk -v FS="privateKey\":\"" 'NF>1{print $2}' new_keychain.txt |
 blockstack call_contract_func $stxAddress hello-world echo-number 2000 1 $stxPrivateKey -t
 ```
 
+# Build from Stacks Blockchain (Rust) Source
+
+Reference: https://github.com/blockstack/stacks-blockchain#download-and-build-stacks-blockchain
+
+* Install Rust and clone repo, build and run tests
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+git clone https://github.com/blockstack/stacks-blockchain
+cd stacks-blockchain
+cargo build
+cargo test testnet  -- --test-threads=1
+```
+
+* Use with codebase
+```
+./target/debug/clarity-cli initialize psq/db2
+./target/debug/clarity-cli check ../blockstack/contracts/lock.clar psq/db2
+./target/debug/clarity-cli launch S1G2081040G2081040G2081040G208105NK8PE5.luke ../blockstack/contracts/lock.clar psq/db2
+./target/debug/clarity-cli execute psq/db2 S1G2081040G2081040G2081040G208105NK8PE5.luke lock S1G2081040G2081040G2081040G208105NK8PE5 \'STQX02C1KXY4VFYX2ABECJYZ4XAG5KV99WAQ370Z
+```
+
+
 # Customise Smart Contract
 
 Follow these steps: https://docs.blockstack.org/core/smart/tutorial-counter.html
+
+# Gitpod
+
+* Setup at https://gitpod.io/#https://github.com/ltfschoen/blockstack
+* Then go to https://ddf3400a-4fd0-48ce-8e5e-7a763e5f9ede.ws-us02.gitpod.io/#/workspace/blockstack
+
+* See for details https://www.gitpod.io/blog/gitpodify/#introducing-gitpod
 
 # References
 

@@ -11,12 +11,12 @@
 ;; acting as global shared state.
 (define-data-var is-locked int 0)
 (define-data-var contract-owner principal 'STQX02C1KXY4VFYX2ABECJYZ4XAG5KV99WAQ370Z)
-(define-constant recipient 'STQX02C1KXY4VFYX2ABECJYZ4XAG5KV99WAQ370Z)
+(define-data-var beneficiary principal 'STQX02C1KXY4VFYX2ABECJYZ4XAG5KV99WAQ370Z)
 
 (define-fungible-token lock-token)
 ;; https://docs.blockstack.org/core/smart/clarityref#ft-mint
-(begin (ft-mint? lock-token u100 contract-owner))
-(begin (ft-transfer? lock-token u2 contract-owner recipient))
+(begin (ft-mint? lock-token u100 (var-get contract-owner)))
+(begin (ft-transfer? lock-token u2 (var-get contract-owner) (var-get beneficiary)))
 
 ;; get contract owner
 ;; public function getter read-only
@@ -30,7 +30,7 @@
 
 ;; change status to locked
 ;; public function
-(define-public (lock ())
+(define-public (lock (address (optional principal)))
   ;; declare local variable and assign contract storage value
   (let ((owner (var-get contract-owner)))
   ;; check if sender of transaction is the contract owner
@@ -41,14 +41,18 @@
       (var-set is-locked 1)
 
       ;; return new value of locked status
-      (ok true)))))
+      (ok true)
+    )
+    (ok false)
+  )))
 
 ;; change status to unlocked
 ;; public function
-(define-public (unlock ())
+(define-public (unlock (address (optional principal)))
   ;; declare local variable and assign contract storage value
   (let ((owner (var-get contract-owner)))
   ;; check if sender of transaction is the contract owner
+  ;; syntax https://docs.blockstack.org/core/smart/clarityref#if
   (if (is-eq tx-sender owner)
     ;; evaluate multi-line expression
     (begin
@@ -56,22 +60,28 @@
       (var-set is-locked 0)
 
       ;; return new value of locked status
-      (ok true)))))
+      (ok true)
+    )
+    (ok false)
+  )))
 
 ;; withdrawal by recipient only when unlocked by contract-owner
 ;; public function
-(define-public (withdraw ())
+(define-public (withdraw (address (optional principal)))
   ;; declare local variable and assign contract storage value
-  (let ((owner (var-get contract-owner)))
-    (let ((recipient (var-get recipient)))
-      ;; check if sender of transaction is the recipient
-      (if (is-eq tx-sender recipient)
-        ;; check if the status is unlocked
-        (if (is-eq is-locked 0)
-          ;; evaluate multi-line expression
-          (begin
-            ;; transfer token balance of contract-owner to recipient
-            (ft-transfer? lock-token u100 contract-owner recipient)
-            ;; return new value of locked status
-            (ok true)))))))
+  (let ((owner (var-get contract-owner)) (recipient (var-get beneficiary)))
+    ;; check if sender of transaction is the recipient
+    (if (is-eq tx-sender recipient)
+      ;; check if the status is unlocked
+      ;; (if (is-eq is-locked 0)
+      ;; evaluate multi-line expression
+      (begin
+        ;; transfer token balance of contract-owner to recipient
+        (ft-transfer? lock-token u100 owner recipient)
+        ;; return new value of locked status
+        (ok true)
+      )
+      (ok false)
+    )))
+
 
